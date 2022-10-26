@@ -12,7 +12,7 @@
     DT_ENV_URL: "{{ dynatrace_tenant_url }}"
   register: script_output
 
-- debug: var=script_output
+- debug: var=script_output.stdout
 
 - name: Run a command
   ansible.builtin.shell:
@@ -21,4 +21,4 @@
     DT_ENV_URL: "{{ dynatrace_tenant_url }}"
   register: shell_output
 
-- debug: var=shell_output
+- debug: var=shell_output.stdout

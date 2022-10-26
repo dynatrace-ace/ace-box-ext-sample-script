@@ -2,39 +2,23 @@
 - include_role:
     name: "dt-oneagent-classic"
 
-- name: Print some debug information 
-  vars: 
-    msg: |
-        Module Variables ("vars"):
-        --------------------------------
-        {{ vars | to_nice_json }} 
-        
-        Environment Variables ("environment"):
-        --------------------------------
-        {{ environment | to_nice_json }} 
-        
-        GROUP NAMES Variables ("group_names"):
-        --------------------------------
-        {{ group_names | to_nice_json }}
-        
-        GROUPS Variables ("groups"):
-        --------------------------------
-        {{ groups | to_nice_json }}
-        
-        HOST Variables ("hostvars"):
-        --------------------------------
-        {{ hostvars | to_nice_json }} 
-
-  debug: 
-    msg: "{{ msg.split('\n') }}"       
+- name: "Ansible | List all known variables and facts"
+  debug:
+    var: hostvars[inventory_hostname]   
 
 - name: Run a script
   ansible.builtin.script: "{{ role_path }}/files/myscript.sh"
   environment:
     DT_ENV_URL: "{{ dynatrace_tenant_url }}"
+  register: script_output
+
+- debug: var=script_output
 
 - name: Run a command
   ansible.builtin.shell:
     cmd: echo "Dynatrace Environment URL $DT_ENV_URL"
   environment:
     DT_ENV_URL: "{{ dynatrace_tenant_url }}"
+  register: shell_output
+
+- debug: var=shell_output

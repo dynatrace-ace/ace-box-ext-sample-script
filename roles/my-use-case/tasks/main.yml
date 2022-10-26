@@ -1,3 +1,49 @@
 ---
 - debug:
-    msg: "Hello from your external use case!"
+    msg: "Hello from {{ my_ext_use_case_name }}!"
+
+# 
+# microk8s, dt-oneagent and jenkins are curated roles provided by 
+# the ACE-Box.
+# Curated roles can be sourced from within your use case.
+# 
+
+- include_role:
+    name: "dt-oneagent-classic"
+
+- name: Print some debug information 
+  vars: 
+    msg: |
+        Module Variables ("vars"):
+        --------------------------------
+        {{ vars | to_nice_json }} 
+        
+        Environment Variables ("environment"):
+        --------------------------------
+        {{ environment | to_nice_json }} 
+        
+        GROUP NAMES Variables ("group_names"):
+        --------------------------------
+        {{ group_names | to_nice_json }}
+        
+        GROUPS Variables ("groups"):
+        --------------------------------
+        {{ groups | to_nice_json }}
+        
+        HOST Variables ("hostvars"):
+        --------------------------------
+        {{ hostvars | to_nice_json }} 
+
+  debug: 
+    msg: "{{ msg.split('\n') }}"       
+
+- name: Run a script
+  ansible.builtin.script: "{{ role_path }}/files/myscript.sh"
+  environment:
+    DT_ENV_URL: "{{ dynatrace_tenant_url }}"
+
+- name: Run a command
+  ansible.builtin.shell:
+    cmd: echo "Dynatrace Environment URL $DT_ENV_URL"
+  environment:
+    DT_ENV_URL: "{{ dynatrace_tenant_url }}"

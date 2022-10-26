@@ -1,13 +1,4 @@
 ---
-- debug:
-    msg: "Hello from {{ my_ext_use_case_name }}!"
-
-# 
-# microk8s, dt-oneagent and jenkins are curated roles provided by 
-# the ACE-Box.
-# Curated roles can be sourced from within your use case.
-# 
-
 - include_role:
     name: "dt-oneagent-classic"
 
